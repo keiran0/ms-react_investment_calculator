@@ -23,7 +23,7 @@ export default function Results({ initial, annual, expected, duration }) {
 
             <tbody>
                 {resultArray.map((result) => 
-                    <tr>
+                    <tr key={result.year}>
                         <td>{result.year}</td>
                         <td>{formatter.format(result.valueEndOfYear)}</td>
                         <td>{formatter.format(result.interest)}</td>
