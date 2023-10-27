@@ -1,26 +1,37 @@
 import Header from './components/Header';
-import Input from './components/Input';
-import Results from './components/Results'
+import UserInput from './components/UserInput';
+import Results from './components/Results';
 
-import { useState } from 'react'
+import { useState } from 'react';
+
 
 function App() {
 
-  const [initial, setInitial] = useState(0);
-  const [annual, setAnnual] = useState(0);
-  const [expected, setExpected] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [userInput, setUserInput] = useState({
+    initialInvestment: 10000,
+    annualInvestment: 1200,
+    expectedReturn: 6,
+    duration: 10
+  })
+
+  const inputIsValid = userInput.duration >= 1
+
+  function handleChange(inputIdentifier, newValue) {
+    setUserInput(prevUserInput => {
+      return {
+        ...prevUserInput,
+        [inputIdentifier]: +newValue //inputIndentifier is a string that matches the properties. The plus will force a conversion from a string value to a number value.
+      }
+    });
+  }
+
 
   return (
     <>
       <Header />
-      <div id="user-input">
-        <Input labelName='Initial Investment' changeValueHandler={(e) => setInitial(Number(e.target.value))} />
-        <Input labelName='Annual Investment' changeValueHandler={(e) => setAnnual(Number(e.target.value))} />
-        <Input labelName='Expected Return' changeValueHandler={(e) => setExpected(Number(e.target.value))} />
-        <Input labelName='Duration' changeValueHandler={(e) => setDuration(Number(e.target.value))} />
-      </div>
-      <Results initial={initial} annual={annual} expected={expected} duration={duration}/>
+      <UserInput onChange={handleChange} userInput={userInput}/>
+      {!inputIsValid && <p className="center">Please enter a duration greater than 0.</p>}
+      {inputIsValid && <Results input={userInput}/>}
     </>
 
 
